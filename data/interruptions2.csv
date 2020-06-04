@@ -1,0 +1,208 @@
+﻿number,primaryActivity,day,time,app,cause,duration,important,location
+9999,studying for final,monday,22:48,gmail,message from dad,7,no,home
+1,studying for final,tuesday,10:43,slack,message from practicum,8,yes,msia
+2,studying for final,tuesday,10:50,gmail,message from nu transportation,5,no,msia
+3,studying for final,tuesday,10:55,slack,message from practicum,2,no,msia
+4,cooking brunch,tuesday,11:25,slack,messagr from practicum,4,no,home
+5,eating,tuesday,11:32,gmail,messagr from o9 recruiter,5,yes,msia
+6,studying for final,tuesday,13:10,linkedin,message from connection,10,no,msia
+7,studying for final,tuesday,14:21,gmail,message from nu,15,no,msia
+8,studying for final,tuesday,14:25,gmail,message from company applie to,6,no,msia
+9,studying for final,tuesday,15:15,gmail,multiple emails,20,no,msia
+10,reading article,tuesday,15:43,duolingo,learn spanish,3,no,msia
+11,studying for final,tuesday,16:02,gmail,linkedin job ,4,no,msia
+12,studying for final,tuesday,16:04,gmail,bcbs meeting cancelle,2,no,msia
+13,studying for final,tuesday,16:11,gmail,godaddy update,10,yes,msia
+14,studying for final,tuesday,16:19,gmail,slack message ,4,no,msia
+15,studying for final,tuesday,16:20,gmail,reddit update,2,no,msia
+16,studying for final,tuesday,16:41,messenger,group chat message - nu public speaking,3,no,msia
+17,studying for final,tuesday,17:00,gmail,ds undergrad email,3,no,msia
+18,studying for final,tuesday,17:05,slack,lirong ma messaging,6,no,msia
+19,studying for final,tuesday,17:16,messenger,nu public speaking,4,no,msia
+20,studying for final,tuesday,17:47,messenger,nu public speaking,3,no,msia
+21,studying for final,tuesday,17:51,messenger,nu public speaking,2,no,msia
+22,studying for final,tuesday,17:55,messenger,nu public speaking,2,no,msia
+23,studying for final,tuesday,17:57,gmail,netflix recommendation,2,no,msia
+24,studying for final,tuesday,17:59,messenger,nu public speaking,1,no,msia
+25,studying for final,tuesday,18:03,messenger,nu public speaking,2,no,msia
+26,eating,tuesday,19:30,gmail,recruiter email,20,yes,alison dining hall
+27,studying for final,wednesday,0:05,messenger,message from sasank,25,no,home
+28,studying for final,wednesday,0:55,messenger,nu public speaking,3,no,home
+29,studying for final,wednesday,1:02,messenger,nu public speaking,3,no,home
+30,studying for final,wednesday,1:03,messenger,nu public speaking,3,no,home
+31,studying for final,wednesday,1:09,messenger,nu public speaking,3,no,home
+32,studying for final,wednesday,1:10,messenger,nu public speaking,2,no,home
+33,studying for final,wednesday,9:16,gmail,springer shop ad,3,no,home
+34,getting ready after shower,wednesday,9:30,facebook,parissa khoram birthday,2,no,home
+35,getting ready after shower,wednesday,9:33,gmail,random twitter updated email,1,no,home
+36,doing exam,wednesday,10:01,slack,slack update about exam,1,yes,home
+37,doing exam,wednesday,10:44,gmail,nu univeristy update,1,no,home
+38,doing exam,wednesday,10:55,gmail,salesforce update,2,no,home
+39,doing exam,wednesday,10:57,gmail,pa2 exam updated ,2,yes,home
+40,doing exam,wednesday,11:30,gmail,pocket application update,2,no,home
+41,writing course evals,wednesday,15:04,gmail,oiss email,2,no,home
+42,reading d3,wednesday,16:03,gmail,google jobs email,3,no,home
+43,reading d3,wednesday,16:42,gmail,oiss email,15,no,home
+44,reading d3,wednesday,5:37,duolingo,practice spanish,4,no,home
+45,reading sapiens,wednesday,21:41,hinge,matched ,7,no,home
+46,reading sapiens,wednesday,22:13,messages,debbie message,15,no,home
+47,reading d3,wednesday,22:44,duolingo,learn spanish,2,no,home
+48,reading d3,wednesday,23:45,whatsapp,mamma message,2,no,home
+49,sleeping,thursday,9:45,instagram,karan manoj message,7,no,home
+50,cooking,thursday,11:51,instagram,mamma message,3,no,home
+51,meditating,thursday,12:30,whatsapp,friend birthday,3,no,home
+52,eating,thursday,12:45,instagram,mamma message,14,no,home
+53,preparing for interview,thursday,13:30,gmail,"linkedin, bbc update",11,no,msia
+54,preparing for interview,thursday,13:48,gmail,library return policy update,5,yes,msia
+55,preparing for interview,thursday,13:57,gmail,library return policy update,7,yes,msia
+56,preparing for interview,thursday,14:06,gmail,provost email,2,no,msia
+57,writing important email,thursday,16:02,gmail,googlejobs internship posting,2,no,msia
+58,reading d3,thursday,16:13,messenger,sasank message,3,no,msia
+59,reading d3,thursday,16:18,gmail,gbva message,8,no,msia
+60,reading d3,thursday,17:03,gmail,carol chris uc berkeley covid19 support,3,no,msia
+61,reading d3,thursday,18:09,gmail,kaggle contest,3,no,msia
+62,reading d3,thursday,18:13,facebook,zuck update,2,no,msia
+63,eating dinner,thursday,19:15,hinge,message,2,no,allison dining
+64,eating dinner,thursday,19:17,gmail,duolingo,2,no,allison dining
+65,eating dinner,thursday,19:19,gmail,hulu message,2,no,allison dining
+66,eating dinner,thursday,19:45,whatsapp,nu latin dancing ,1,no,allison dining
+67,eating dinner,thursday,19:55,whatsapp,dadima message,3,yes,allison dining
+68,reading sapiens,thursday,20:08,reddit,trending update,1,no,home
+69,reading sapiens,thursday,20:30,gmail,bhakti yoga update,6,no,home
+70,reading sapiens,thursday,21:12,duolingo,keep practicing spanish,2,no,home
+71,reading sapiens,thursday,22:19,facebook,michael godwin updated story,1,no,home
+72,reading sapiens,thursday,22:20,whatsapp,berkeley indian group chat,4,no,home
+73,reading sapiens,thursday,22:45,duolingo,practice spanish,2,no,home
+74,reading sapiens,thursday,22:46,gmail,coursera update,3,no,home
+75,reading sapiens,thursday,22:47,gmail,yogov email,2,no,home
+76,reading sapiens,thursday,23:11,whatsapp,mamma message,1,no,home
+77,reading sapiens,thursday,23:15,whatsapp,mamma message,1,no,home
+78,reading sapiens,thursday,23:19,whatsapp,mamma message,1,no,home
+79,reading sapiens,thursday,23:20,botim,mamma missed calling,10,no,home
+80,reading sapiens,thursday,23:21,instagram,messaging mamma,15,no,home
+81,sleeping,friday,7:13,whatsapp,aashi group message,1,no,home
+82,sleeping,friday,8:04,gmail,nu president email,10,no,home
+83,sleeping,friday,9:35,linkedin,job posting,6,yes,home
+84,sleeping,friday,9:51,duolingo,hearts full again,2,no,home
+85,sleeping,friday,9:51,gmail,twitter email,1,no,home
+86,showering,friday,10:06,spotify,new song release,3,no,home
+87,meditating,friday,10:46,gmail,gbva prof email,11,yes,home
+88,meditating,friday,10:53,gmail,gbva prof email,11,yes,home
+89,cooking,friday,11:00,hinge,match,2,no,home
+90,reading d3,friday,12:00,gmail,law school email ,1,no,home
+91,reading d3,friday,12:30,whatsapp,8 brown dudes,2,no,home
+92,reading d3,friday,12:30,instagram,aashi like message,1,no,home
+93,reading d3,friday,13:30,whatsapp,8 brown dudes,2,no,home
+94,reading d3,friday,13:30,instagram,message ,3,no,home
+95,reading d3,friday,13:38,gmail,netflix email,2,no,home
+96,reading d3,friday,14:38,gmail,natgeo email,6,no,home
+97,cooking,friday,15:18,gmail,job posting,3,no,home
+98,cooking,friday,15:23,messaging,debbie message,6,no,home
+99,cooking,friday,15:27,slack,sarah message,3,yes,home
+100,eating,friday,16:18,gmail,spotify album release,2,no,home
+101,eating,friday,16:29,gmail,diego email,6,no,home
+102,studying,friday,16:33,gmail,nu university email-stay at home order,5,no,home
+103,studying,friday,16:45,gmail,twitter email,2,no,home
+104,studying,friday,17:16,gmail,engelhart desk,4,no,home
+105,studying,friday,17:22,gmail,canvas,3,no,home
+106,studying,friday,17:30,gmail,o9 follow up,4,no,home
+107,studying,friday,17:33,gmail,canvas,2,no,home
+108,studying,friday,17:37,gmail,canvas,2,no,home
+109,reading d3,friday,17:44,gmail,canvas,2,no,home
+110,reading d3,friday,17:47,slack,rocky message,2,no,home
+111,reading d3,friday,17:48,gmail,airbnb rejection,2,no,home
+112,reading d3,friday,17:59,gmail,natgeo email,3,no,home
+113,reading d3,friday,18:05,gmail,canvas report,2,no,home
+114,reading d3,friday,18:31,gmail,bofa email,2,no,home
+115,eating,friday,19:30,whatsapp,8 brown dudes,2,no,allison dining hall
+116,eating,friday,19:31,whatsapp,8 brown dudes,2,no,allison dining hall
+117,eating,friday,19:51,messaging,debbie message,1,no,allison dining hall
+118,eating,friday,19:52,hinge,most compatible updated,1,no,allison dining hall
+119,eating,friday,19:55,whatsapp,8 brown dudes,1,no,allison dining hall
+120,eating,friday,19:58,whatsapp,8 brown dudes,1,no,allison dining hall
+121,eating,friday,20:10,reddit,update,1,no,allison dining hall
+122,eating,friday,20:12,gmail,new grading policy - berkeley,2,no,allison dining hall
+123,recording data,friday,23:32,whatsapp,dhruv message,2,no,home
+124,showering,saturday,10:01,gmail,canvas update,4,no,home
+125,cooking,saturday,12:01,gmail,covid19 update,9,no,home
+126,eating,saturday,12:28,gmail,netflix suggestion,1,no,home
+127,eating,saturday,12:40,whatsapp,8 brown dudes,2,no,home
+128,reading d3,saturday,12:49,whatsapp,mamma message,2,yes,home
+129,reading d3,saturday,12:50,whatsapp,8 brown dudes,2,no,home
+130,reading d3,saturday,13:35,gmail,quora message,1,no,home
+131,reading d3,saturday,13:44,reddit,covid 19 trending,2,no,home
+132,reading d3,saturday,13:58,whatsapp,8 brown dudes,1,no,home
+133,reading d3,saturday,14:20,gmail,twitter update,3,no,home
+134,napping,saturday,16:16,messenger,8 brown dudes,2,no,home
+135,napping,saturday,16:17,gmail,lyft update,1,no,home
+136,napping,saturday,16:18,messenger,8 brown dudes,1,no,home
+137,reading sapiens,saturday,18:57,slack,megan meme post,7,no,home
+138,reading sapiens,saturday,19:01,instagram,follow request,2,no,home
+139,reading sapiens,saturday,19:39,gmail,random update,1,no,home
+140,cooking,saturday,20:40,whatsapp,8 brown dudes,4,no,home
+141,cooking,saturday,20:45,whatsapp,8 brown dudes,2,no,home
+142,cooking,saturday,20:56,whatsapp,8 brown dudes,3,no,home
+143,studying,saturday,20:57,messenger,8 brown dudes,1,no,home
+144,studying,saturday,21:34,duolingo,learn spanish,3,no,home
+145,eating,saturday,21:54,whatsapp,msia indian group,2,no,home
+146,eating,saturday,22:12,messenger,sasank message,3,no,home
+147,studying,saturday,22:59,hinge,message,3,no,home
+148,studying,saturday,23:02,messaging,debbie message,4,no,home
+149,studying,saturday,23:12,whatsapp,mamma message,6,no,home
+150,sleeping,sunday,8:19,slack,kris nikolov message,7,no,home
+151,sleeping,sunday,8:46,instagram,mamma message,12,no,home
+152,meditating,sunday,11:41,slack,sarah message,8,no,home
+153,reading d3,sunday,12:41,reddit,trending,3,no,home
+154,reading d3,sunday,12:43,instagram,aditya g follow request,5,no,home
+155,reading d3,sunday,1:35,whatsapp,8 brown dudes,7,no,home
+156,eating,sunday,14:18,whatsapp,8 brown dudes,2,no,home
+157,eating,sunday,14:20,whatsapp,8 brown dudes,2,no,home
+158,eating,sunday,14:22,whatsapp,8 brown dudes,2,no,home
+159,eating,sunday,14:25,whatsapp,8 brown dudes,2,no,home
+160,eating,sunday,14:28,whatsapp,mamma message,10,no,home
+161,reading d3,sunday,14:57,whatsapp,8 brown dudes,2,no,home
+162,reading d3,sunday,15:02,whatsapp,8 brown dudes,4,no,home
+163,reading d3,sunday,15:08,whatsapp,8 brown dudes,3,no,home
+164,reading d3,sunday,15:29,voice call,vyom called about game,35,no,home
+165,reading d3,sunday,15:37,whatsapp,8 brown dudes,2,no,home
+166,structuring paper,sunday,16:42,facebook,tamika added photo of me,3,no,home
+167,structuring paper,sunday,17:01,whatsapp,msia indian group,3,no,home
+168,structuring paper,sunday,17:05,whatsapp,msia indian group,2,no,home
+169,structuring paper,sunday,17:58,whatsapp,msia indian group,2,no,home
+170,reading sapiens,sunday,18:20,whatsapp,8 brown dudes,2,no,home
+171,reading sapiens,sunday,19:05,whatsapp,mamma message,2,no,home
+172,reading sapiens,sunday,19:12,whatsapp,mamma message,2,no,home
+173,reading sapiens,sunday,19:14,whatsapp,mamma message,2,no,home
+174,reading d3,sunday,22:45,duolingo,learn spanish,2,no,home
+175,sleeping,monday,8:04,whatsapp,gda salsa group,2,no,home
+176,sleeping,monday,8:10,whatsapp,gda salsa group,2,no,home
+177,sleeping,monday,8:19,slack,kris nikolov message,2,no,home
+178,sleeping,monday,8:30,whatsapp,gda salsa group,2,no,home
+179,showering,monday,9:08,whatsapp,gda salsa group,2,no,home
+180,showering,monday,9:16,slack,nu rankings message,96,no,home
+181,meditating,monday,9:27,slack,theta cohort - sarah,15,no,home
+182,cooking,monday,10:28,slack,kris nikolov update message,3,no,home
+183,cooking,monday,10:29,slack,dklabjan message,133,no,home
+184,sna paper,monday,11:30,reddit,ask reddit,3,no,home
+185,sna paper,monday,11:32,reddit,ask reddit,3,no,home
+186,sna paper,monday,11:35,message,pay verizon bill,80,yes,home
+187,sna paper,monday,11:37,linkedin,new job posted,5,no,home
+188,sna paper,monday,12:53,slack,chloe course survey reminder,15,yes,home
+189,sna paper,monday,12:54,whatsapp,8 brown dudes,3,no,home
+190,writing important email,monday,12:56,slack,carlota message,,,
+191,cooking,monday,13:01,slack,poll response reminder,5,yes,home
+192,cooking,monday,13:07,slack,poll response reminder,5,yes,home
+193,cooking,monday,13:09,instagram,alex tchykov response,2,no,home
+194,eating,monday,13:44,messenger,nu public speaking ,5,no,home
+195,sna paper,monday,14:03,messenger,nu public speaking ,3,no,home
+196,sna paper,monday,14:16,messenger,nu public speaking ,3,no,home
+197,sna paper,monday,14:19,slack,"sarah, lirong, rocky message",700,no,home
+198,applying for job,monday,14:23,messenger,jarrett duran message,9,no,home
+199,planning,monday,14:32,whatsapp,mamma message,110,yes,home
+200,cooking,monday,14:33,instagram,jonathan unda liked comment,4,no,home
+201,sna paper,monday,15:20,messenger,nu public speaking ,2,no,home
+202,sna paper,monday,15:26,messenger,nu public speaking ,3,no,home
+203,sna paper,monday,15:28,messenger,nu public speaking ,5,no,home
+204,sna paper,monday,18:35,linkedin,networking doesnt have to stop,4,no,home
+205,cooking popcorn,monday,18:36,message,joe k message,3,no,home
+206,sna paper,monday,20:55,linkedin,aditya sinha message,73,no,home

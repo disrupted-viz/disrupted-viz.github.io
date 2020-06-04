@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Disrupted</title>
+		<script type="text/javascript" src="../jscript/d3.js"></script>
+		<style type="text/css">
+
+			.axis {
+				fill: none;
+				stroke: black;
+				stroke-width: 0.5;
+			}
+
+			.pArea {
+				fill: tomato;
+				stroke: blue;
+			}
+
+			.nArea {
+				fill: teal;
+				stroke: yellow;
+			}
+			.pArea:hover  {
+				fill: rgb(255, 184, 77);
+			}
+			.nArea:hover {
+				fill: rgb(92, 214, 92)
+			}
+			.unclickable {
+				pointer-events: none;
+			}
+			.introButtons {
+				cursor: pointer;
+			}
+			.introButtons text {
+				font-weight: bold;
+			}
+
+			.dayButtons {
+				cursor: pointer;
+			}
+
+			.dayButtons text {
+				font-weight: bold;
+			}
+			#vizTitle {
+				font-weight: bold;
+				font-family: Helvetica, sans-serif;
+				font-size: 35px;	
+			}
+
+			#pTitle {
+				font-weight: bold;
+				font-size: 20px;
+			}
+
+			#nTitle {
+				font-weight: bold;
+				font-size: 20px;
+			}
+			#pieTitle {
+				font-weight: bold;
+				font-size: 20px;
+			}
+
+			.calendar text {
+				font-weight: bold;
+			}
+			.score text {
+				font-weight: bold;
+			}
+			#life:hover rect {
+				fill: rgb(255, 194, 102);
+			}
+			#clutter:hover rect {
+				fill: rgb(204, 153, 102);
+			}
+			#notif:hover rect {
+				fill: rgb(51, 214, 255);
+			}
+			#pickups:hover rect {
+				fill: rgb(214, 51, 255);
+			}
+			#declutter:hover rect {
+				fill: rgb(128, 255, 0);
+			}
+
+			.calendar:hover rect {
+				fill: rgb(26, 117, 255);
+			}
+
+			#sunButton:hover rect {
+				fill: rgb(179, 179, 179);
+			}
+			#monButton:hover rect {
+				fill: rgb(179, 179, 179);
+			}
+			#tueButton:hover rect {
+				fill: rgb(179, 179, 179);
+			}
+			#wedButton:hover rect {
+				fill: rgb(179, 179, 179);
+			}
+			#thuButton:hover rect {
+				fill: rgb(179, 179, 179);
+			}
+			#friButton:hover rect {
+				fill: rgb(179, 179, 179);
+			}
+			#satButton:hover rect {
+				fill: rgb(179, 179, 179);
+			}
+
+			.nextPageButton {
+				border: none;
+  				color: green;
+  				padding: 8px 20px;
+  				text-align: center;
+  				text-decoration: none;
+  				display: inline-block;
+  				font-size: 16px;
+  				margin: 4px 2px;
+  				cursor: pointer;
+  				background-color: #4CAF50;
+  				position: absolute;
+  				right: 3px;
+  				top: 10px;
+  			}
+			.nextPageButton:hover {
+  				background-color: #4CAF50;
+  				color: white;
+  			}
+
+  			#instructions {
+  				fill:#66e0ff;
+  			}
+
+  			#tooltipInstructions {
+  				fill: #66e0ff;
+  			}
+  			.prevPageButton {
+				border: none;
+  				color: green;
+  				padding: 8px 20px;
+  				text-align: center;
+  				text-decoration: none;
+  				display: inline-block;
+  				font-size: 16px;
+  				margin: 4px 2px;
+  				cursor: pointer;
+  				background-color: #4CAF50;
+  				position: absolute;
+  				left: 5px;
+  				top: 10px;
+  			}
+
+			.prevPageButton:hover {
+  				background-color: #4CAF50;
+  				color: white
+  			}
+
+  			#tooltip {
+				position: absolute;
+				width: 200px;
+				height: auto;
+				padding: 10px;
+				background-color: white;
+				-webkit-border-radius: 10px;
+				-moz-border-radius: 10px;
+				border-radius: 10px;
+				-webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+				-moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+				box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+				pointer-events: none;
+			}
+			
+			#tooltip.hidden {
+				display: none;
+			}
+			
+			#tooltip p {
+				margin: 0;
+				font-family: sans-serif;
+				font-size: 16px;
+				line-height: 20px;
+			}
+
+
+		</style>
+	</head>
+	<button type="button" onclick="window.location.href='secondpart.html';" class="nextPageButton">Proceed to Disrupted: Part II &raquo;</button>
+	<button type="button" onclick="window.location.href='../index.html';" class="prevPageButton"> &laquo Back to Introduction</button>
+
+	<body>
+		<script type="text/javascript">
+			var calendarData;
+			var intData;
+			var apptimeData;
+			var notifpickupData;
+			var initDay = 'sunday';
+			
+			//dimensions
+			var w = 1500;
+			var h = 700;
+			var margin = {'left': 40, 'right': 40, 'bottom': 40, 'top':40};
+
+			var svg = d3.select('body').append('svg').attr('width', w).attr('height',h);
+
+			//global time stuff
+			var timeFormatter = d3.timeFormat('%H:%M');
+			var timeParser = d3.timeParse('%H:%M');
+			var tScale = d3.scaleTime()
+							   .domain([timeParser('08:00'), timeParser('23:59')])
+							   .range([margin.left, 0.75*w]);
+
+			tScale.ticks(d3.timeMinute.every(15));
+			//add project title
+			svg.append('text').attr('x', 200).attr('y', margin.top)
+			.text('Disrupted: Losing Focus & Productivity in the Smartphone Age')
+			.attr('font-size', 30).attr('id', 'vizTitle');
+
+			svg.append('text').attr('x', 160).attr('y', margin.top + 28)
+			.text("INSTRUCTIONS: Click on the buttons to successively add life, clutter, notifications, phone pickups, and finally declutter (which keeps only the important disruptions)!")
+			.attr('font-size', 17).attr('id', 'instructions');
+
+			svg.append('text').attr('x', 350).attr('y', margin.top + 48)
+			.text("After adding the 'clutter', hover over individual distruptions to explore their importance, duration, and location.")
+			.attr('font-size', 17).attr('id', 'tooltipInstructions');
+
+			
+			//icons locations
+			var icons = {
+					'instagram': '../images/instagram.png',
+			   		'facebook': '../images/facebook.png',
+			   		'gmail': '../images/gmail2.png',
+			   		'slack': '../images/slack3.png',
+			   		'whatsapp': '../images/whatsapp.png',
+			   		'messenger': '../images/messenger.png',
+			   		'hinge': '../images/hinge.png',
+			   		'reddit': '../images/reddit.png',
+			   		'duolingo': '../images/duolingo.png',
+			   		'linkedin': '../images/linkedin.png',
+			   		'botim': '../images/botim.png',
+			   		'spotify': '../images/spotify.png',
+			   		'messaging': '../images/messaging.png'
+
+			   	};
+			//blockCount init   	
+			var blockCount = {
+				'08:00':0,'08:10': 0, '08:20': 0,'08:30':0, '08:40':0, '08:50':0,'09:00':0,'09:10': 0,'09:20': 0,'09:30':0,'09:40':0,
+				'09:50':0,'10:00':0,'10:10': 0,'10:20': 0,'10:30':0,'10:40':0,'10:50':0,'11:00':0,'11:10': 0,'11:20': 0,'11:30':0,
+				'11:40':0,'11:50':0,'12:00':0,'12:10': 0,'12:20': 0,'12:30':0,'12:40':0,'12:50':0,'13:00':0,'13:10': 0,'13:20': 0,
+				'13:30':0,'13:40':0,'13:50':0,'14:00':0,'14:10': 0,'14:20': 0,'14:30':0,'14:40':0,'14:50':0,'15:00':0,
+				'15:10': 0,'15:20': 0,'15:30':0,'15:40':0,'15:50':0,'16:00':0,'16:10': 0,'16:20': 0,'16:30':0,'16:40':0,'16:50':0,'17:00':0,
+				'17:10': 0,'17:20': 0,'17:30':0,'17:40':0,'17:50':0,'18:00':0,'18:10': 0,'18:20': 0,'18:30':0,'18:40':0,'18:50':0,'19:00':0,
+				'19:10': 0,'19:20': 0,'19:30':0,'19:40':0,'19:50':0,'20:00':0,'20:10': 0,'20:20': 0,'20:30':0,'20:40':0,'20:50':0,
+				'21:00':0,'21:10': 0,'21:20': 0,'21:30':0,'21:40':0,'21:50':0,'22:00':0,'22:10': 0,'22:20': 0,'22:30':0,'22:40':0,'22:50':0,
+				'23:00':0,'23:10': 0,'23:20': 0,'23:30':0,'23:40':0,'23:50':0,
+			};
+
+
+			//add the life, clutter,pickups, notifications buttons
+			var buttonWidth = 100;
+			var buttonHeight = 30;
+			var introButtonSpacing = 20;
+			var buttonTextColor = 'tomato';
+			var buttonFill = 'grey';
+			var introButtons = svg.append('g').attr('class','introButtons');
+			
+			var lifeButton = introButtons.append('g').attr('id', 'life').attr('opacity', 1);
+			var clutterButton = introButtons.append('g').attr('id', 'clutter').attr('opacity', 0);
+			var notifButton = introButtons.append('g').attr('id', 'notif').attr('opacity', 0);
+			var pickupButton = introButtons.append('g').attr('id', 'pickups').attr('opacity', 0);
+			var declutterButton = introButtons.append('g').attr('id', 'declutter').attr('opacity', 0);
+
+			lifeButton.append('rect')
+					  .attr('x',300 ).attr('y',130 )
+					  .attr('width', 100).attr('height', 30)
+					  .attr('fill', 'orange')
+					  .attr('rx', 5).attr('rx',5)
+			lifeButton.append('text').attr('x',325 ).attr('y',150 ).attr('fill', 'black').text('Add life');
+
+			clutterButton.append('rect')
+					  .attr('x',300 + 100 + introButtonSpacing).attr('y',130 )
+					  .attr('width', 100).attr('height', 30)
+					  .attr('fill', 'sienna')
+					  .attr('rx', 5).attr('rx',5);
+			
+			clutterButton.append('text').attr('x',325 + 100 + 10).attr('y',150 ).attr('fill', 'black').text('Add clutter');
+			
+			notifButton.append('rect')
+					  .attr('x',300 + 2*(100 + introButtonSpacing)).attr('y',130 )
+					  .attr('width', 150).attr('height', 30)
+					  .attr('fill', 'skyblue')
+					  .attr('rx', 5).attr('rx',5);0
+			
+			notifButton.append('text').attr('x',325 + 220).attr('y',150 ).attr('fill', 'black').text('Turn on notifications');
+
+			pickupButton.append('rect')
+					  .attr('x',300 + 3*(100 + introButtonSpacing) + 50).attr('y',130 )
+					  .attr('width', 150).attr('height', 30)
+					  .attr('fill', 'mediumorchid')
+					  .attr('rx', 5).attr('rx',5);
+			
+			pickupButton.append('text').attr('x',545 + 180).attr('y',150 ).attr('fill', 'black').text('Pickup the phone');
+
+			declutterButton.append('rect')
+					  .attr('x',300 + 4*(100 + introButtonSpacing) + 100).attr('y',130 )
+					  .attr('width', 100).attr('height', 30)
+					  .attr('fill', 'greenyellow')
+					  .attr('rx', 5).attr('rx',5);
+			
+			declutterButton.append('text').attr('x',545 + 180 + 125 + 50).attr('y',150 ).attr('fill', 'black').text('Declutter');
+
+			//add interactivity
+			lifeButton.on('click', function() {
+				svg.selectAll('g.calendar').selectAll('rect').transition().duration(1500).attr('opacity', 0.3);
+				clutterButton.transition().duration(1500).attr('opacity', 1);	
+			})
+
+			clutterButton.on('click', function(){
+				svg.selectAll('g.socialmedia').selectAll('image').transition().duration(1500).attr('opacity', 1);
+				svg.selectAll('g.apptimePie').selectAll('g.arc').transition().duration(1500).attr('opacity', 1);
+				svg.selectAll('g.apptimePie').selectAll('text').transition().duration(1500).attr('opacity', 1);
+				svg.selectAll('g.pieLegend').selectAll('rect').transition().duration(1500).attr('opacity', 1);
+				svg.selectAll('g.pieLegend').selectAll('text').transition().duration(1500).attr('opacity', 1);
+				notifButton.transition().duration(1500).attr('opacity', 1);
+
+
+			})
+
+			notifButton.on('click', function() {
+				svg.selectAll('path.nArea').transition().duration(1500).attr('opacity', 1);
+				pickupButton.transition().duration(1500).attr('opacity', 1);
+
+				svg.selectAll('text#nTitle').transition().duration(1500).attr('opacity', 1);
+			});
+
+			pickupButton.on('click', function(){
+				svg.selectAll('path.pArea').transition().duration(1500).attr('opacity', 1);
+				declutterButton.transition().duration(1500).attr('opacity', 1);
+
+				svg.selectAll('text#pTitle').transition().duration(1500).attr('opacity', 1);
+				//svg.selectAll('g.score').transition().duration(1500).attr('opacity', 1);
+			})
+
+			declutterButton.on('click', function(){
+				svg.selectAll('g.socialmedia').selectAll('image').filter(function(d) {
+					return d.important == 'no'
+				})
+				.transition()
+				.duration(1500)
+				.attr('opacity', 0);
+
+				svg.selectAll('g.dayButtons').transition().duration(1500).attr('opacity',1);
+			})
+			
+			d3.csv('../data/calendar.csv', function(data) {
+				//console.table(data);
+				calendarData = data;
+				var dayArr = filterCalendar(data, initDay);
+				populateActivity(dayArr);
+			   
+			});
+
+			d3.csv('../data/interruptions2.csv', function(data) {
+				intData = data;
+				var dayInt = filterInt(data, initDay);
+				populateInt(dayInt, initDay);
+			})
+
+			 
+			
+			d3.csv('../data/apps-time.csv', pieRowConverter, function(data) {
+				apptimeData = data;
+				var piedata = filterAppTime(data, initDay)
+				populatePie(piedata);
+			})
+
+			
+			
+
+			d3.csv('../data/notifs-pickups.csv', areaRowConverter, function(data) {
+				notifpickupData = data;
+				populatePickupArea(data, initDay);
+				populateNotifArea(data, initDay);
+				
+						
+			})
+			
+
+			//FUNCTIONS 
+
+			//generate all DOM elements for day
+			var generateElements = function(day) {
+				var dayArr = filterCalendar(calendarData, day);
+				populateActivity(dayArr);
+				var dayInt = filterInt(intData, day);
+				initBlockCount();
+				populateInt(dayInt, day);
+				var piedata = filterAppTime(apptimeData, day)
+				populatePie(piedata);
+				populatePickupArea(notifpickupData, day);
+				populateNotifArea(notifpickupData, day);
+				populateAutoScore(day);
+				var moncorr = 0.56855;
+				var tuecorr = 0.51579;
+				var wedcorr = 0.52629;
+				var thucorr = 0.72302;
+				var fricorr = 0.71876;
+				var satcorr = 0.66628;
+				var suncorr = 0.56044;
+
+				var monscore = 1- Math.pow(moncorr,2);
+				var tuescore = 1- Math.pow(tuecorr,2);
+				var wedscore = 1- Math.pow(wedcorr,2);
+				var thuscore = 1- Math.pow(thucorr,2);
+				var friscore = 1- Math.pow(fricorr,2);
+				var satscore = 1- Math.pow(satcorr,2);
+				var sunscore = 1- Math.pow(suncorr,2);
+
+			}
+			//delete all elements from DOM
+			var deleteElements = function() {
+				//select all the groups of data and remove them after a transition
+				svg.selectAll('g.calendar').transition().duration(250).remove();
+				svg.selectAll('g.cTAxis').transition().duration(250).remove();
+				svg.selectAll('g.socialmedia').transition().duration(250).remove();
+				svg.selectAll('path.pArea').transition().duration(250).remove();
+				svg.selectAll('path.nArea').transition().duration(250).remove();
+				svg.selectAll('g.pTAxis').transition().duration(250).remove();	
+				svg.selectAll('g.nTAxis').transition().duration(250).remove();	
+				svg.selectAll('g.nYAxis').transition().duration(250).remove();	
+				svg.selectAll('g.pYAxis').transition().duration(250).remove();
+				svg.selectAll('g.apptimePie').transition().duration(250).remove();	
+				svg.selectAll('g.score').remove();
+				svg.selectAll('g.pieLegend').remove();
+
+			}
+
+			//filter out calendar data from day and on the hour
+			var filterCalendar = function(data, day) {
+				var dayArr = [];
+				for (var i = 0; i < data.length; i++) {
+					if (data[i].day == day & data[i].time.slice(-2) == '00') {
+						dayArr.push(data[i]);
+					}
+				}
+				return dayArr;
+			}
+
+			//populate calendar using data for single day (in dayArr)
+			var populateActivity = function(dayArr) {
+				var calendar = svg.append('g').attr('class', 'calendar');
+
+				var timeAxis = d3.axisBottom().scale(tScale).ticks(24).tickFormat(timeFormatter).tickSize(-85).ticks(16);
+				
+				calendar.selectAll('rect')
+					.data(dayArr)
+					.enter()
+					.filter(function(d){
+						return timeParser(d.time) >= timeParser('8:00'); 
+					})
+					.append('rect')
+					.attr('x', function(d,i) {
+						return tScale(timeParser(d.time)) ; 
+					})
+					.attr('y', h/3)
+					.attr('width', 68)
+					.attr('height', 70)
+					.attr('fill', function(d) {
+						return 'blue';
+					})
+					.attr('opacity', 0);
+				
+				
+				svg.append('g')
+				.attr('class', 'cTAxis')
+				.attr('transform', 'translate(' + 0 + ','+ 320 + ')')
+				.call(timeAxis)
+				.attr('opacity', 0.3);
+				
+				
+				calendar.selectAll('.activityText')
+				.data(dayArr)
+				.enter()
+				.append('text')
+				.attr('x', function(d,i) {
+					return tScale(timeParser(d.time)) + 10;
+				})
+				.attr('y', function(d,i) {
+					return h/3 + 15 ;
+				})  
+				.text(function(d) {
+					return d.activity;
+				})
+			   .attr("font-family", "sans-serif")
+			   .attr("font-size", "11px")
+			   .attr('fill', 'white');
+			}
+
+			var filterInt = function(data, day) { 
+				var dayDis = [];
+			   	for (var i = 0; i < data.length; i++) {
+			   		if (data[i].day == day) {
+			   			dayDis.push(data[i]);
+			   		}
+			   	}
+			   	return dayDis;
+			}
+
+			var populateInt = function(data) {
+				//console.log(data);
+				var socialMedia = svg.append('g').attr('class', 'socialmedia');
+
+				socialMedia.selectAll('image')
+							.data(data)
+							.enter()
+							.append('image')
+							.attr('xlink:href', function(d){
+								var app = d.app;
+								return icons[d.app];
+							})
+							.attr('width', 14)
+							.attr('height', 14)
+							.attr('x', function(d) {
+								var t = d.time;
+								var rt = timeRounder(t);
+								return tScale(timeParser(rt));
+							})
+							.attr('y', function(d) {
+								var baseline = h/3 + 55;
+								var xtime = timeRounder(d.time);
+								var numBlocks = blockCount[xtime];
+								blockCount[xtime] = blockCount[xtime] + 1;
+
+								return baseline - numBlocks*15;
+
+							})
+							.attr('opacity', 0);
+							
+							
+				//add tooltips for each icon
+				
+				socialMedia.selectAll('image').append('title').text(function(d) {
+					var tt = "DURATION: " + d.duration.toUpperCase() + " SEC" + "\n" +
+					"IMPORTANT: " + d.important.toUpperCase() + '\n' +  
+					"LOCATION: " + d.location.toUpperCase();
+					return tt; 
+				});	
+			}
+
+			//filter apptime data to return data from day only
+			var filterAppTime = function(data, day) {
+				var piedata = [];
+				var dayData;
+				//filter chart data for one day only
+				for(var i = 0; i< data.length;i++) {
+					if (data[i].day == day) {
+						dayData = data[i];
+					}
+				}
+				for (var key in dayData) {
+					if (key != 'day' & key != 'total') {
+						piedata.push({
+						'label': key,
+						'value': dayData[key]
+					});
+					}
+				}
+				return piedata;
+				
+			}
+
+			//populate pie chart with data from data from single day
+			var populatePie = function(data) {
+				//console.log(data);
+				var innerRad = 20;
+				var outerRad = 40;
+				var arc = d3.arc().innerRadius(innerRad).outerRadius(outerRad);
+				//piefy
+				var makePie = d3.pie().value(function(d) {
+					return d.value;
+				});
+				var colorScale = d3.scaleOrdinal(d3.schemeCategory20);
+				
+				var pieGroup = svg.append('g').attr('class','apptimePie');
+				pieGroup.append('text')
+						.attr('x', (0.75*w - 20)).attr('y', (h/3 - 15))
+						.text('Time Spent (mins) on each app')
+						.attr('opacity',0)
+						.attr('id', 'pieTitle');
+				//create a group for each contain arcs
+				var arcs = pieGroup.selectAll('g.arc')
+							  .data(makePie(data))
+							  .enter()
+							  .append('g')
+							  .attr('class', 'arc')
+							  .attr('transform', "translate(" + outerRad + "," + outerRad + ")");
+
+				//actually draw the arcs			  
+				arcs.append('path')
+					.attr('fill', function(d,i) {
+						return colorScale(i);
+					})
+					.attr('d', arc);
+				//move pie into place	
+				arcs.attr('transform', 'translate('+ (0.75*w + 60) + ',' + (h/3 + 35) + ')' )
+				.attr('opacity', 0);
+
+				arcs.append('title').text(function(d) {
+					return "APP: " + d.data.label + "\n" + "DURATION: " + d.data.value + " mins";
+				});
+				var pieLegend = svg.append('g').attr('class','pieLegend');
+
+				//add a legend
+				pieLegend.selectAll('rect')
+						.data(data)
+						.enter()
+						.append('rect')
+						.attr('x',w - margin.right - 300)
+						.attr('y',function(d,i) {
+							return i*15 + 315;
+						})
+						.attr('width', 30)
+						.attr('height', 10)
+						.attr('fill', function(d,i) {
+							return colorScale(i);
+						})
+						.attr('opacity', 0);
+
+				pieLegend.selectAll('legend-text')
+					.data(data)
+					.enter()
+					.append('text')
+					.text(function(d) {
+						return d.label;
+					})
+					.attr('x', w - margin.right - 250)
+					.attr('y', function(d,i) {
+						return i*15 + 325;
+					})
+					.attr('opacity', 0);	
+
+			};
+
+
+
+			
+
+			//populate pickup area plot using data direct from source (no filtering needed)
+			var populatePickupArea = function(data, day) {
+				var pScale = d3.scaleLinear()
+								.domain([
+									d3.min(data, function(d) {return d.pickups;}),
+									d3.max(data, function(d) {return d.pickups;})
+									])
+								.range([2/3*h, (2/3)*h - 55]);
+
+				
+				//now generate pickups area plot				
+				var timeAxis_p = d3.axisBottom().scale(tScale).ticks(24).tickFormat(timeFormatter).tickSize(-85).ticks(16);
+
+				var yAxis_p = d3.axisLeft().scale(pScale).ticks(5);
+				var area_p = d3.area()
+							.defined(function(d) {
+								var t = timeParser(d.time);
+								return t >= timeParser('7:00') & t <= timeParser('23:59') & d.day == day;
+							})
+							.x(function(d,i) {
+								var t = timeParser(d.time);
+								t.setHours(t.getHours() + 1);
+								return tScale(t);
+							})	
+							.y0(function() {
+								return pScale.range()[0];
+							})
+							.y1(function(d) {
+								var p = d.pickups;
+								return pScale(p);
+							});
+
+				svg.append('path')
+				.datum(data)
+				.attr('class', 'pArea')
+				.attr('d', area_p)
+				.attr('opacity', 0);
+
+				svg.append('g')
+				.attr('class', 'pTAxis')
+				.attr('transform', 'translate(' + 0 + ','+ (2/3*h) + ')')
+				.call(timeAxis_p)
+				.attr('opacity', 0.3);
+
+				svg.append('g')
+				.attr('class', 'pYAxis')
+				.attr('transform', 'translate(' + margin.left + ','+ 0 + ')')
+				.call(yAxis_p)
+				.attr('opacity', 0.3);
+
+				//add title
+				svg.append('text')
+				   .attr('id', 'pTitle')
+				   .attr('x', 450).attr('y',360)
+				   .attr('opacity', 0)
+				   .text('No. of Phone Pickups throughout the day');
+				
+
+			}
+
+			var populateNotifArea = function(data, day) {
+				//now generate notifs area plot
+				var timeAxis_n = d3.axisBottom().scale(tScale).ticks(24).tickFormat(timeFormatter).tickSize(-85).ticks(16);
+				var nScale = d3.scaleLinear()
+								.domain([
+									d3.min(data, function(d) { return d.notifs;}) ,
+									d3.max(data, function(d) { return d.notifs;})
+								])
+								.range([h - margin.bottom, (h - margin.bottom) - 55])
+				
+				var yAxis_n = d3.axisLeft().scale(nScale).ticks(5);
+				
+				var area_n = d3.area()
+							.defined(function(d) {
+								var t = timeParser(d.time);
+								return t >= timeParser('7:00') & t <= timeParser('23:59') & d.day == day;
+							})
+							.x(function(d,i) {
+								var t = timeParser(d.time);
+								t.setHours(t.getHours() + 1);
+								return tScale(t);
+							})	
+							.y0(function() {
+								return nScale.range()[0];
+							})
+							.y1(function(d) {
+								var n = d.notifs;
+								return nScale(n);
+							});
+				
+				
+				svg.append('path')
+				.datum(data)
+				.attr('class', 'nArea')
+				.attr('d', area_n)
+				.attr('opacity', 0);
+				
+				
+				svg.append('g')
+				.attr('class', 'nTAxis')
+				.attr('transform', 'translate(' + 0 + ','+ (h - margin.bottom) + ')')
+				.call(timeAxis_n)
+				.attr('opacity', 0.3);
+
+				svg.append('g')
+				.attr('class', 'nYAxis')
+				.attr('transform', 'translate(' + margin.left + ','+ 0 + ')')
+				.call(yAxis_n)
+				.attr('opacity', 0.3);
+
+				//add title
+				svg.append('text').attr('id', 'nTitle')
+				   .attr('x', 450).attr('y',525)
+				   .attr('opacity', 0)
+				   .text('No. of Notifications throughout the day');
+
+			
+			}
+
+			//populates autonomy scores
+			var populateAutoScore = function(day) {
+				var moncorr = 0.56855;
+				var tuecorr = 0.51579;
+				var wedcorr = 0.52629;
+				var thucorr = 0.72302;
+				var fricorr = 0.71876;
+				var satcorr = 0.66628;
+				var suncorr = 0.56044;
+
+				var monscore = 1- Math.pow(moncorr,2);
+				var tuescore = 1- Math.pow(tuecorr,2);
+				var wedscore = 1- Math.pow(wedcorr,2);
+				var thuscore = 1- Math.pow(thucorr,2);
+				var friscore = 1- Math.pow(fricorr,2);
+				var satscore = 1- Math.pow(satcorr,2);
+				var sunscore = 1- Math.pow(suncorr,2);
+
+				if (day == 'monday') {
+					var score = svg.append('g').attr('class', 'score');
+					score.append('text')
+					.attr('x', 600).attr('y',110 )
+					.text('Selected Day: ' + 'Monday' + ' | ' + 'Autonomy Score: ' + monscore.toFixed(3)).attr('opacity', 1)
+					.attr('fill', 'lightcoral');
+					return monscore;
+				}
+
+				if (day == 'tuesday') {
+					var score = svg.append('g').attr('class', 'score');
+					score.append('text').attr('x', 600).attr('y',110 )
+						 .text('Selected Day: ' + 'Tuesday' + ' | ' + 'Autonomy Score: ' + tuescore.toFixed(3)).attr('opacity', 1)
+						 .attr('fill', 'lightcoral');
+					return tuescore;
+				}
+
+				if (day == 'wednesday') {
+					var score = svg.append('g').attr('class', 'score');
+					score.append('text').attr('x', 600).attr('y',110 )
+					.text('Selected Day: ' + 'Wednesday' + ' | ' + 'Autonomy Score: ' + wedscore.toFixed(3)).attr('opacity', 1)
+					.attr('fill', 'lightcoral');
+					return wedscore;
+				}
+
+				if (day == 'thursday') {
+					var score = svg.append('g').attr('class', 'score');
+					score.append('text').attr('x', 600).attr('y',110 )
+					.text('Selected Day: ' + 'Thursday' + ' | ' + 'Autonomy Score: ' + thuscore.toFixed(3)).attr('opacity', 1)
+					.attr('fill', 'lightcoral');
+					return thuscore;
+				}
+
+				if (day == 'friday') {
+					var score = svg.append('g').attr('class', 'score');
+					score.append('text').attr('x', 600).attr('y',110 )
+					.text('Selected Day: ' + 'Friday' + ' | ' + 'Autonomy Score: ' + friscore.toFixed(3)).attr('opacity', 1)
+					.attr('fill', 'lightcoral');
+					return friscore;
+				}
+
+				if (day == 'saturday') {
+					var score = svg.append('g').attr('class', 'score');
+					score.append('text').attr('x', 600).attr('y',110 )
+					.text('Selected Day: ' + 'Saturday' + ' | ' + 'Autonomy Score: ' + satscore.toFixed(3)).attr('opacity', 0).attr('opacity', 1)
+					.attr('fill', 'lightcoral');
+					return satscore;
+				}
+
+				if (day == 'sunday') {
+					var score = svg.append('g').attr('class', 'score');
+					score.append('text').attr('x', 600).attr('y',110 )
+					.text('Selected Day: ' + 'Sunday' + ' | ' + 'Autonomy Score: ' + sunscore.toFixed(3)).attr('opacity', 1)
+					.attr('fill', 'lightcoral');
+					return sunscore;
+				}
+			}
+
+			//init autonomy score
+			populateAutoScore('sunday');
+
+
+			var setupDayButtons = function() {
+
+								//add day selection buttons
+				var buttons = svg.append('g').attr('class', 'dayButtons').attr('opacity', 0);
+
+				var sunButton = buttons.append('g').attr('id', 'sunButton');
+				var monButton = buttons.append('g').attr('id', 'monButton');
+				var tueButton = buttons.append('g').attr('id', 'tueButton');
+				var wedButton = buttons.append('g').attr('id', 'wedButton');
+				var thuButton = buttons.append('g').attr('id', 'thuButton');
+				var friButton = buttons.append('g').attr('id', 'friButton');
+				var satButton = buttons.append('g').attr('id', 'satButton');
+				
+
+				var buttonWidth = 100;
+				var buttonHeight = 30;
+				var interButtonSpacing = 10;
+				var buttonTextColor = 'tomato';
+				var buttonFill = 'grey';
+
+				sunButton.append('rect')
+						 .attr('x',margin.left)
+						 .attr('y',180)
+						 .attr('width', buttonWidth)
+						 .attr('height', buttonHeight)
+						 .attr('rx',5).attr('rx',5)
+						 .attr('fill', buttonFill);
+				sunButton.append('text').attr("x", margin.left + 10).attr("y", 200).text("sunday").attr('fill', 'tomato');
+
+				monButton.append('rect')
+						 .attr('x',margin.left + 1*(buttonWidth + interButtonSpacing))
+						 .attr('y',180)
+						 .attr('width', buttonWidth)
+						 .attr('height', buttonHeight)
+						 .attr('rx',5).attr('rx',5)
+						 .attr('fill', buttonFill);
+				
+				monButton.append('text').attr("x", margin.left + 10 + buttonWidth + interButtonSpacing).attr("y", 200).text("monday").attr('fill', 'tomato');
+
+				tueButton.append('rect')
+						 .attr('x',margin.left + 2*(buttonWidth + interButtonSpacing))
+						 .attr('y',180)
+						 .attr('width', buttonWidth)
+						 .attr('height', buttonHeight)
+						 .attr('rx',5).attr('rx',5)
+						 .attr('fill', buttonFill);
+				
+				tueButton.append('text')
+						 .attr("x", margin.left + 10 + 2*(buttonWidth + interButtonSpacing))
+						 .attr("y", 200).text("tuesday")
+						 .attr('fill', 'tomato');
+
+				wedButton.append('rect')
+						 .attr('x',margin.left + 3*(buttonWidth + interButtonSpacing))
+						 .attr('y',180)
+						 .attr('width', buttonWidth)
+						 .attr('height', buttonHeight)
+						 .attr('rx',5).attr('rx',5)
+						 .attr('fill', buttonFill);
+				
+				wedButton.append('text')
+						 .attr("x", margin.left + 10 + 3*(buttonWidth + interButtonSpacing))
+						 .attr("y", 200).text("wednesday")
+						 .attr('fill', 'tomato');
+				
+				thuButton.append('rect')
+						 .attr('x',margin.left + 4*(buttonWidth + interButtonSpacing))
+						 .attr('y',180)
+						 .attr('width', buttonWidth)
+						 .attr('height', buttonHeight)
+						 .attr('rx',5).attr('rx',5)
+						 .attr('fill', buttonFill);
+				
+				thuButton.append('text')
+						 .attr("x", margin.left + 10 + 4*(buttonWidth + interButtonSpacing))
+						 .attr("y", 200).text("thursday")
+						 .attr('fill', 'tomato');
+
+				friButton.append('rect')
+						 .attr('x',margin.left + 5*(buttonWidth + interButtonSpacing))
+						 .attr('y',180)
+						 .attr('width', buttonWidth)
+						 .attr('height', buttonHeight)
+						 .attr('rx',5).attr('rx',5)
+						 .attr('fill', buttonFill);
+				
+				friButton.append('text')
+						 .attr("x", margin.left + 10 + 5*(buttonWidth + interButtonSpacing))
+						 .attr("y", 200).text("friday")
+						 .attr('fill', 'tomato');
+
+				satButton.append('rect')
+						 .attr('x',margin.left + 6*(buttonWidth + interButtonSpacing))
+						 .attr('y',180)
+						 .attr('width', buttonWidth)
+						 .attr('height', buttonHeight)
+						 .attr('rx',5).attr('rx',5)
+						 .attr('fill', buttonFill);
+				
+				satButton.append('text')
+						 .attr("x", margin.left + 10 + 6*(buttonWidth + interButtonSpacing))
+						 .attr("y", 200).text("saturday")
+						 .attr('fill', 'tomato');
+				
+				buttons.attr('transform', 'translate(200,0)');
+				
+				sunButton.on('click', function() {
+					deleteElements();
+					generateElements('sunday');
+				});
+
+				monButton.on('click', function() {
+					deleteElements();
+					generateElements('monday');
+				});
+				
+				
+				tueButton.on('click', function() {
+					deleteElements();
+					generateElements('tuesday');
+				});
+
+				wedButton.on('click', function() {
+					deleteElements();
+					generateElements('wednesday');
+				});
+
+				thuButton.on('click', function() {
+					deleteElements();
+					generateElements('thursday');
+				});
+
+				friButton.on('click', function() {
+					deleteElements();
+					generateElements('friday');
+				});
+
+				satButton.on('click', function() {
+					deleteElements();
+					generateElements('saturday');
+				});
+				//adding prompt user prompt
+				buttons.append('text').attr('id', 'dayPrompt').attr('y',200).attr('x',-100).text('Pick another day:').attr('opacity',1);
+			}
+
+			setupDayButtons();
+ 
+
+
+			//UTILITY FUNCTIONS
+			var timeRounder = function(t) {
+				var mins = t.slice(-2);
+				var hours = t.slice(0,2);
+
+				if (+mins >= 55) {
+					var newHours = +hours + 1;
+					var newMins = '00';
+					return newHours.toString() + ':' + newMins;
+				}
+				else {
+					var roundedMins = (Math.round(+mins/10) * 10);
+					var roundedTime = hours + ':' + roundedMins.toString()
+					if (roundedMins == 0) {
+						return roundedTime + '0';
+					}
+					return roundedTime;
+				}	
+			}
+			//initializes the block store to 0
+			var initBlockCount = function() {
+				blockCount = {
+					'08:00':0,'08:10': 0, '08:20': 0,'08:30':0, '08:40':0, '08:50':0,'09:00':0,'09:10': 0,'09:20': 0,'09:30':0,'09:40':0,
+					'09:50':0,'10:00':0,'10:10': 0,'10:20': 0,'10:30':0,'10:40':0,'10:50':0,'11:00':0,'11:10': 0,'11:20': 0,'11:30':0,
+					'11:40':0,'11:50':0,'12:00':0,'12:10': 0,'12:20': 0,'12:30':0,'12:40':0,'12:50':0,'13:00':0,'13:10': 0,'13:20': 0,
+					'13:30':0,'13:40':0,'13:50':0,'14:00':0,'14:10': 0,'14:20': 0,'14:30':0,'14:40':0,'14:50':0,'15:00':0,
+					'15:10': 0,'15:20': 0,'15:30':0,'15:40':0,'15:50':0,'16:00':0,'16:10': 0,'16:20': 0,'16:30':0,'16:40':0,'16:50':0,'17:00':0,
+					'17:10': 0,'17:20': 0,'17:30':0,'17:40':0,'17:50':0,'18:00':0,'18:10': 0,'18:20': 0,'18:30':0,'18:40':0,'18:50':0,'19:00':0,
+					'19:10': 0,'19:20': 0,'19:30':0,'19:40':0,'19:50':0,'20:00':0,'20:10': 0,'20:20': 0,'20:30':0,'20:40':0,'20:50':0,
+					'21:00':0,'21:10': 0,'21:20': 0,'21:30':0,'21:40':0,'21:50':0,'22:00':0,'22:10': 0,'22:20': 0,'22:30':0,'22:40':0,'22:50':0,
+					'23:00':0,'23:10': 0,'23:20': 0,'23:30':0,'23:40':0,'23:50':0,
+			};
+			return 0;
+			}
+
+			//ROW CONVERTER FUNCTIONS 
+			var pieRowConverter = function(d) {
+				return {
+					day: d.day,
+					whatsapp: +d.whatsapp,
+					messenger: +d.messenger,
+					instagram: +d.instagram,
+					facebook: +d.facebook,
+					linkedin: +d.linkedin,
+					reddit: +d.reddit,
+					gmail: +d.gmail,
+					slack: +d.slack,
+					youtube: +d.youtube,
+					textmessage: +d.textmessage,
+					spotify: +d.spotify,
+					safari: +d.safari,
+					settings: +d.settings,
+					botim: +d.botim,
+					duolingo: +d.duolingo,
+					clock: +d.clock,
+					appstore: +d.appstore,
+					weather: +d.weather,
+					podcasts: +d.podcasts,
+					hinge: +d.hinge,
+					twitter: +d.twitter,
+					calendar: +d.calendar,
+					photos: +d.photos, 
+					teams: +d.teams,
+					total: +d.total
+				};
+			};
+
+			var areaRowConverter = function(d) {
+				return {
+					day: d.day,
+					time: d.time,
+					notifs: +d.notifs,
+					pickups: +d.pickups
+				};
+			};
+
+		</script>
+	</body>
+</html>

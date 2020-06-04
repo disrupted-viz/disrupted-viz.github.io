@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+		<title>Disrupted</title>
+		<script type="text/javascript" src="../jscript/d3.js"></script>
+		<style type="text/css">
+			#lineTitle {
+				font-weight: bold;
+				font-size: 20px;
+			}
+
+			#barTitle {
+				font-weight: bold;
+				font-size: 20px;
+			}
+
+			#histTitle {
+				font-weight: bold;
+				font-size: 20px;
+			}
+
+			rect:hover {
+				fill: #b3ffb3;
+			} 
+
+			.histRect:hover {
+				fill: #b3ffb3;
+			}
+
+			.lines:hover {
+				stroke: #b3ffb3;
+				stroke-width: 7;
+			}
+			.nextPageButton {
+				border: none;
+  				color: green;
+  				padding: 8px 20px;
+  				text-align: center;
+  				text-decoration: none;
+  				display: inline-block;
+  				font-size: 16px;
+  				margin: 4px 2px;
+  				cursor: pointer;
+  				background-color: #4CAF50;
+  				position: absolute;
+  				right: 3px;
+  				top: 5px;
+  			}
+			.nextPageButton:hover {
+  				background-color: #4CAF50;
+  				color: white;
+  			}
+
+  			.prevPageButton {
+				border: none;
+  				color: green;
+  				padding: 8px 20px;
+  				text-align: center;
+  				text-decoration: none;
+  				display: inline-block;
+  				font-size: 16px;
+  				margin: 4px 2px;
+  				cursor: pointer;
+  				background-color: #4CAF50;
+  				position: absolute;
+  				left: 20px;
+  				top: 2px;
+  			}
+
+			.prevPageButton:hover {
+  				background-color: #4CAF50;
+  				color: white
+  			}
+		</style>
+</head>
+<button type="button" onclick="window.location.href='ending.html';" class="nextPageButton">Proceed to Debrief &raquo;</button>
+<button type="button" onclick="window.location.href='calendar.html';" class="prevPageButton"> &laquo Back to Disrupted: Part I</button>
+
+<body>
+	<script type="text/javascript">
+		//dimensions
+		var w = 1500;
+		var h = 700;
+		var margin = {'left': 40, 'right': 40, 'bottom': 40, 'top':40};
+		var svg = d3.select('body').append('svg').attr('width', w).attr('height',h);
+		var autoScores = [{'day': 'sunday', 'score':0.686},
+						  {'day': 'monday', 'score':0.677},
+						  {'day': 'tuesday', 'score': 0.734},
+						  {'day': 'wednesday', 'score': 0.723},
+						  {'day': 'thursday', 'score': 0.477},
+						  {'day': 'friday', 'score': 0.483},
+						  {'day': 'saturday', 'score': 0.556}]
+		
+
+		
+
+		var dayScaler = d3.scaleBand().domain(["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"])
+										 .range([margin.left, w - margin.right]);
+		var lineScaler = d3.scaleLinear().domain([0.40,0.734]).range([h/3, margin.top]);
+		var line = d3.line().x(function(d) {
+		   	return dayScaler(d.day);
+		   }).y(function(d) {
+		   	return lineScaler(d.score);
+		   })
+		var tAxis = d3.axisBottom().scale(dayScaler)
+		var scoreAxis = d3.axisLeft().scale(lineScaler)
+
+		svg.append('g').attr('class', 'dayofweekAxis').call(tAxis).attr('transform', 'translate('+ (margin.left-20) + ',' + (h/3) + ')');
+		svg.append('g').attr('class', 'scoreAxis').call(scoreAxis).attr('transform', 'translate(' + (margin.left + 10) + ',' + '0)');
+
+		var lines = svg.append('path').datum(autoScores).attr('fill', 'none').attr('stroke', 'tomato').attr('stroke-width', 4)
+		  .attr('d',line);
+		lines.attr('transform', 'translate(120,0)')
+		lines.attr('class', 'lines');
+
+		var points = svg.append('g').attr('class', 'scorePoints').selectAll('circle').data(autoScores).enter().append('circle')
+					   .attr('cx', function(d) {
+					   	return dayScaler(d.day);
+					   })  
+					   .attr('cy', function(d) {
+					   	return lineScaler(d.score);
+					   })
+					   .attr('r', 3);
+		points.attr('transform', 'translate(120,0)')
+
+		//add y axis labels
+		svg.append('text').attr("transform", 'translate(' + (margin.left -25) + ',' +(h/3 - 40) + ')rotate(-90)').text('Autonomy Score')
+		.attr('font-size', 15);
+		
+
+		//add interpretation for line chart
+		svg.append('text').attr('id','lineTitle').attr('x',w/3 - 175).attr('y', margin.top - 10).text("Our autonomy starts out high at the beginning of the week, but then drops off as we get closer towards the weekend.")
+		
+
+		//ADDING THE BAR CHART
+		var fracImpAll = 0.09178744;
+		var framNotImpAll = 0.90821256;
+
+		//importance data
+		var dataset = [
+		{numImp: 0, numNotImp:25},
+		{numImp: 5, numNotImp: 28},
+		{numImp:4 , numNotImp: 22},
+		{numImp:2 , numNotImp:20},
+		{numImp:3 , numNotImp: 29},
+		{numImp: 4, numNotImp: 39},
+		{numImp:1 , numNotImp: 25}
+		];
+
+		//Set up stack method
+		var stack = d3.stack()
+						  .keys([ 'numNotImp', 'numImp' ])
+						  .order(d3.stackOrderDescending);  // <-- Flipped stacking order
+
+		//Data, stacked
+		var series = stack(dataset);
+
+		//Set up scales
+		var xScale = d3.scaleBand()
+				.domain(d3.range(dataset.length))
+				.range([0, 0.85 *w])
+				.paddingInner(0.05);
+		
+		var yScale = d3.scaleLinear()
+					   .domain([0,				
+					d3.max(dataset, function(d) {
+						return d.numNotImp + d.numImp;
+					})
+				])
+				.range([h - margin.bottom - 200, h/3 + 30]);  // <-- Flipped vertical scale
+				
+		//Easy colors accessible via a 10-step ordinal scale
+		var colors = d3.scaleOrdinal(d3.schemeCategory10);
+		
+			
+		// Add a group for each row of data
+		var groups = svg.selectAll("g.bar")
+				.data(series)
+				.enter()
+				.append("g")
+				.style("fill", function(d, i) {
+					return colors(i);
+				});
+	
+		// Add a rect for each data value
+		var rects = groups.selectAll("rect")
+				.data(function(d) { return d; })
+				.enter()
+				.append("rect")
+				.attr("x", function(d, i) {
+					return 50 + xScale(i);
+				})
+				.attr("y", function(d) {
+					return yScale(d[1]);  // <-- Changed y value
+				})
+				.attr("height", function(d) {
+					return yScale(d[0]) - yScale(d[1]);  // <-- Changed height value
+				})
+				.attr("width", xScale.bandwidth());
+			
+		var labels = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+
+		var barText = svg.append('g').attr('class', 'barText');
+		
+		barText.selectAll('text').data(labels).enter().append('text').text(function(d) {return d;}).attr('x', function(d,i) {
+				return margin.left + xScale(i) + 75;
+			})
+			.attr('y', function(d,i) {
+				return 2/3 * h + 10;
+			});
+
+		var baryAxis = d3.axisLeft().scale(yScale);
+		svg.append('g').attr('class', 'baryAxis').call(baryAxis).attr('transform', 'translate('+ (margin.left) + ',0)');
+
+		//add legend
+		svg.append('rect').attr('x', w - margin.right - 100).attr('y',h/2 - 75 ).attr('width', 30).attr('height', 30).attr('fill', d3.schemeCategory10[1]);
+		svg.append('rect').attr('x', w - margin.right - 100).attr('y',h/2 - 30 ).attr('width', 30).attr('height', 30).attr('fill', d3.schemeCategory10[0]);
+		svg.append('text').attr('x', w - margin.right - 50 ).attr('y', h/2 - 60).text("Not Important")
+		svg.append('text').attr('x', w - margin.right - 50).attr('y', h/2 - 10).text("Important")
+
+		//add yaxis labels
+		svg.append('text').attr("transform", 'translate(' + (margin.left -28) + ',' +(h/2 + 60) + ')rotate(-90)').text('No. of interruptions');
+		
+		//add interpretation for bar chart
+		svg.append('text').attr('id', 'barTitle').attr('x', w/2 - 520).attr('y', h/3 + 50).text("Most disruptions are not important relative to the activity we are doing at the time.");
+
+
+
+		d3.csv("../data/interruptions2.csv", function(data) {
+
+				data = data.filter(function(d) {
+					return +d.duration <= 20;
+				})
+				//xScaler for histogram
+				var xScalerHist = d3.scaleLinear()
+      				.domain([0, d3.max(data, function(d) {return +d.duration;})])     
+      				.range([margin.left, w - margin.right]);
+
+				
+      			// setup histogram layout 
+  				var histogram = d3.histogram()
+      							  .value(function(d) { return +d.duration; })   // I need to give the vector of value
+      							  .domain(xScalerHist.domain())  // then the domain of the graphic
+      							  .thresholds(xScalerHist.ticks(25)); // then the numbers of bins
+
+  				//histogramify the data
+  				var bins = histogram(data);
+
+  				//yScaler for histogram
+      			var yScalerHist = d3.scaleLinear()
+  									.domain([0, d3.max(bins, function(d) {return d.length})])
+      					  			.range([h, (2/3) * h +40]);
+      			
+
+      			//place in the xaxis for histogram
+      			var histXaxis = d3.axisBottom().scale(xScalerHist);
+      			svg.append('g').attr('class', 'histXaxis').call(histXaxis).attr('transform', 'translate(0,' + (h - margin.bottom + 10) + ')');
+
+      			//place in the yaxis for histogram
+
+  				var histYaxis = d3.axisLeft().scale(yScalerHist);
+      			svg.append('g').attr('class', 'histYaxis').call(histYaxis).attr('transform', 'translate(' + (margin.left) + ',' + (-30) + ')');
+      			
+  				//append rect's to the figure
+  				
+  				svg.selectAll("recta")
+      			   .data(bins)
+      			   .enter()
+      			   .append("rect")
+      			   .attr('class', 'histRect')
+      			   .attr("x", 1)
+        		   .attr("transform", function(d) { return "translate(" + xScalerHist(d.x0) + "," + (yScalerHist(d.length) - margin.bottom + 10) + ")"; })
+        		   .attr("width", function(d) { return xScalerHist(d.x1) - xScalerHist(d.x0) -1 ; })
+        		   .attr("height", function(d) { return h - yScalerHist(d.length); })
+        		   .attr("fill", "#69b3a2");
+
+        		   
+        		   //xaxis label
+        		   svg.append('text').attr('x', w/2 - 10).attr('y', h - margin.bottom + 40).text('seconds')
+
+        		   svg.append('text').attr("transform", 'translate(' + (margin.left -25) + ',' +(2/3*h +115) + ')rotate(-90)').text('Count')
+					.attr('font-size', 15);
+		
+        		   //add interpretation for histogram
+        		   svg.append('text').attr('id', 'histTitle').attr('x', w/2 - 200).attr('y', 2/3*h + 50).text("Most disruptions take no more than a couple of seconds to deal with.");
+
+        		  })
+
+			
+			
+
+
+
+
+	</script>
+</body>
+</html>

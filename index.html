@@ -1,0 +1,67 @@
+<html>
+<head>
+<style>
+.nextPageButton {
+        border: none;
+          color: green;
+          padding: 8px 20px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin: 4px 2px;
+          cursor: pointer;
+          background-color: #4CAF50;
+          position: absolute;
+          right: 3px;
+          top: 18px;
+        }
+      .nextPageButton:hover {
+          background-color: #4CAF50;
+          color: white;
+</style>
+</head>
+<body>
+
+<button type="button" onclick="window.location.href='html/calendar.html';" class="nextPageButton">Proceed to Visualization &raquo;</button>
+ 
+</body>
+</html>
+<p style="text-align: center;"><u><strong><span style="font-size: 36px; color: rgb(44, 130, 201);">Disrupted: Losing Focus &amp; Productivity in the Digital Age</span></strong></u></p>
+<p style="text-align: center;"><u><strong><span style='font-family: "Times New Roman", Times, serif; font-size: 28px; color: rgb(147, 101, 184);'>Motivation</span></strong></u></p>
+<p><span style="font-size: 18px;">With the advent of work-from-home during COVID-19 or even much before, have you ever felt that you are losing a battle? Not just any battle, but the battle for your focused attention. On the one side, there are the activities that are part &amp; parcel of your life. These can be working on a homework assignment, preparing slides for a presentation, working out, or even as urbane as cooking/doing laundry. On the other hand, there is the constant barrage of smartphone notifications. Even though, they make take only a few minutes/seconds to address, when you return to your original task, you find yourself thoroughly lost. This is only made worse by the high rate of at which these notifications interrupt your work. I have felt myself losing that battle, and set out to visualize their adverse impact. This led me to building&nbsp;</span><em><span style="font-size: 18px;">&#39;Disrupted&#39;.</span></em></p>
+<p style="text-align: center;"><u><strong><span style="font-size: 28px; color: rgb(147, 101, 184);">Data Collection</span></strong></u></p>
+<p><span style="font-size: 18px;">As a data scientist, I started out by collecting data. Lacking test subjects, I volunteered myself.&nbsp;&nbsp;</span><span style="font-size: 18px;">I collected four types of data over a week (7 days):</span></p>
+<p><em><u><span style="font-size: 20px; color: rgb(65, 168, 95);"><strong>1) Interruptions</strong>&nbsp;</span></u></em></p>
+<p><span style="font-size: 18px;">Every time I would be interrupted by my smartphone I would note the following variables:</span></p>
+<ul>
+    <li><span style="font-size: 18px;">Cause</span></li>
+    <li><span style="font-size: 18px;">Time Spent in dealing with it</span></li>
+    <li><span style="font-size: 18px;">My location</span></li>
+    <li><span style="font-size: 18px;">App pushing the notification</span></li>
+    <li><span style="font-size: 18px;">Local time</span></li>
+    <li><span style="font-size: 18px;">Primary Activity&nbsp;</span></li>
+    <li><span style="font-size: 18px;">Whether the interruption was important or not</span></li>
+</ul>
+<p><strong><em><u><span style="color: rgb(65, 168, 95); font-size: 22px;">2) Pickups&nbsp;</span></u></em></strong></p>
+<p><span style="font-size: 18px;">This was data about the number of times I picked up the phone grouped in hourly intervals. This was obtained from the Screentime App on my iPhone.</span></p>
+<p><strong><em><u><span style="color: rgb(65, 168, 95); font-size: 22px;">3) Notifications</span></u></em></strong></p>
+<p><span style="font-size: 18px;">This was data about the total number of notifications pushed by my phone grouped into hourly intervals. This was also obtained from the Screentime App on my iPhone.</span></p>
+<p><strong><u><em><span style="color: rgb(65, 168, 95); font-size: 22px;">4) Time Spent</span></em></u></strong></p>
+<p><span style="font-size: 18px;">This was data about time spent on each app grouped on a daily basis. Again, sourced from the Screentime App on my iPhone.&nbsp;</span></p>
+<p><span style="font-size: 18px;">While deciding whether or not an interruption was important <span style='color: rgb(0, 0, 0); font-family: "Times New Roman"; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;'>(a subjective question)</span>, &nbsp;I set the following standard:</span></p>
+<ul>
+    <li><span style="font-size: 18px;">Does this event require my immediate attention, relative to the activity I am currently engaged in?&nbsp;</span></li>
+</ul>
+<p><span style="font-size: 18px;">Some examples are in order:</span></p>
+<ul>
+    <li><span style="font-size: 18px;">If a project group needed my urgent input (and this was blocking project progress), and I was exercizing at that time, then this would be classified as an IMPORTANT interruption.</span></li>
+    <li><span style="font-size: 18px;">If the NU President launched a new COVID-19 relief fund, and I was reading my textbook at that time, then this would a NOT IMPORTANT interruption.</span></li>
+</ul>
+<p style="text-align: center;"><u><strong><span style="font-size: 28px; color: rgb(147, 101, 184);">Analytics</span></strong></u></p>
+<p><span style="font-size: 18px;">This raises a fundamental question about our very own human existence: autonomy. How much of what we do is truly resulting from our free will versus external prompting? In this case, how much do we really interact with our smartphones because we really want to versus because our smartphone wants to (i.e. by pushing a notification)?&nbsp;</span></p>
+<p><span style="font-size: 18px;">To answer this question, I set out to develop an autonomy score. Simply put, the autonomy score measures how much of your phone interaction (operationalized as &lsquo;No. of pickups&rsquo;) &nbsp;results from your own free will vs. an external (environmental) push notification (operationalized as &#39;No. of push notifications&#39;).</span></p>
+<p><span style="font-size: 18px;">To calculate an autonomy score, I trained the simplest possible model (a simple linear regression) to predict my number of pickups throughout the day (dependent variable) based on the number of notifications I received (independent variable). Then, the autonomy score is calculated as:</span></p>
+<p style="text-align: center;"><span style="font-size: 18px;"><strong><span style="background-color: rgb(255, 255, 255); color: rgb(243, 121, 52);">Autonomy score = 1 &ndash; R<sup>2</sup><sub>pickups, notifs</sub></span></strong></span></p>
+<p style="text-align: center;"><span style="font-size: 18px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);"><strong>where &nbsp;R<sup>2</sup><sub>pickups, notifs</sub></strong><strong>&nbsp; is the coefficient of determination of the model.</strong> </span></p>
+<p><span style="font-size: 18px;">Intuitively, the higher the R<sup>2</sup><sub>pickups, notifs</sub> , the more your phone picking up behavior is determined by external notifications pushed, and thus the lower your &lsquo;autonomy&rsquo;. The opposite is true if R<sup>2</sup><sub>pickups, notifs &nbsp;&nbsp;</sub>is low. This implies that you pick up your phone out of your own free will.&nbsp;</span></p>
