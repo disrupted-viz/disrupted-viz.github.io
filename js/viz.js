@@ -578,7 +578,7 @@ var scrollVis  = function() {
             intDurG
             .append('text')
             .attr('class', 'subtitle')
-            .text("Total Number of Interruptions")
+            .text("Interruption Duration")
             .attr('x', 1/3*width)
             .attr('y', margin.top - 30);
 
