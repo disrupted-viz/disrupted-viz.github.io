@@ -6,7 +6,7 @@ Returns a chart function object
 var scrollVis  = function() {
     // constants to define the size
     // and margins of the vis area.
-    var width = 1500;
+    var width = 1420;
     var height = 500;
     var margin = {'left': 40, 'right': 40, 'bottom': 40, 'top':40};
     //RIGHT_SHIFT = how much should the elements in viz be shifted right
@@ -63,7 +63,7 @@ var scrollVis  = function() {
     var timeParser = d3.timeParse('%H:%M');
     var tScale = d3.scaleTime()
                    .domain([timeParser('08:00'), timeParser('23:59')])
-                   .range([margin.left, 0.75*width]);
+                   .range([margin.left, 0.8*width]);
 
     tScale.ticks(d3.timeMinute.every(15));
 
